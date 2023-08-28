@@ -64,6 +64,8 @@ def stratify_split(
         return df[df["_split"] == split].drop("_split", axis=1)
 
     # Train, test split with stratify
+    # The `.groupby(stratify)` ensures that the class distribution in training is
+    # the same in validation.
     grouped = ds.groupby(stratify).map_groups(_add_split, batch_format="pandas")  # group by each unique value in the column we want to stratify on
     train_ds = grouped.map_batches(_filter_split, fn_kwargs={"split": "train"}, batch_format="pandas")  # combine
     test_ds = grouped.map_batches(_filter_split, fn_kwargs={"split": "test"}, batch_format="pandas")  # combine
