@@ -18,6 +18,8 @@ transformers==4.28.1
 # Notebook
 cleanlab==2.3.1
 jupyterlab==3.6.3
+jupyterlab-git==0.42.0
+nbdime==3.2.1
 lime==0.2.0.1
 seaborn==0.12.2
 wordcloud==1.9.2
