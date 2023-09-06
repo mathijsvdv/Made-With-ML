@@ -5,10 +5,6 @@ cluster_name: default
 # node.
 max_workers: 1
 
-# The autoscaler will scale up the cluster faster with higher upscaling speed.
-# E.g., if the task requires adding more nodes then autoscaler will gradually
-# scale up the cluster in chunks of upscaling_speed*currently_running_nodes.
-# This number should be > 0.
 upscaling_speed: 1.0
 
 # This executes all commands on all nodes in the docker container,
@@ -35,42 +31,16 @@ idle_timeout_minutes: 5
 provider:
     type: aws
     region: eu-central-1
-    # Availability zone(s), comma-separated, that nodes may be launched in.
-    # Nodes will be launched in the first listed availability zone and will
-    # be tried in the subsequent availability zones if launching fails.
     availability_zone: eu-central-1a,eu-central-1b,eu-central-1c
-    # Whether to allow node reuse. If set to False, nodes will be terminated
-    # instead of stopped.
-    cache_stopped_nodes: True # If not present, the default is True.
 
 # How Ray will authenticate with newly launched nodes.
 auth:
     ssh_user: ubuntu
-# By default Ray creates a new private keypair, but you can also use your own.
-# If you do so, make sure to also set "KeyName" in the head and worker node
-# configurations below.
-#    ssh_private_key: /path/to/your/key.pem
 
-# Tell the autoscaler the allowed node types and the resources they provide.
-# The key is the name of the node type, which is just for debugging purposes.
-# The node config specifies the launch config and physical instance type.
 available_node_types:
     ray.head.default:
-        # The node type's CPU and GPU resources are auto-detected based on AWS instance type.
-        # If desired, you can override the autodetected CPU and GPU resources advertised to the autoscaler.
-        # You can also set custom resources.
-        # For example, to mark a node type as having 1 CPU, 1 GPU, and 5 units of a resource called "custom", set
-        # resources: {"CPU": 1, "GPU": 1, "custom": 5}
-        resources: {}
-        # Provider-specific config for this node type, e.g. instance type. By default
-        # Ray will auto-configure unspecified fields such as SubnetId and KeyName.
-        # For more documentation on available fields, see:
-        # http://boto3.readthedocs.io/en/latest/reference/services/ec2.html#EC2.ServiceResource.create_instances
         node_config:
             InstanceType: m5.2xlarge
-            # Default AMI for eu-central-1.
-            # Check https://github.com/ray-project/ray/blob/master/python/ray/autoscaler/_private/aws/config.py
-            # for default images for other zones.
             ImageId: ami-0383bd0c1fc4c63ec
             # You can provision additional disk space with a conf as follows
             BlockDeviceMappings:
@@ -78,40 +48,22 @@ available_node_types:
                   Ebs:
                       VolumeSize: 500
                       DeleteOnTermination: true
-            # Additional options in the boto docs.
     ray.worker.default:
-        # The minimum number of worker nodes of this type to launch.
-        # This number should be >= 0.
-        min_workers: 1
-        # The maximum number of worker nodes of this type to launch.
-        # This takes precedence over min_workers.
+        min_workers: 0
         max_workers: 1
-        # The node type's CPU and GPU resources are auto-detected based on AWS instance type.
-        # If desired, you can override the autodetected CPU and GPU resources advertised to the autoscaler.
-        # You can also set custom resources.
-        # For example, to mark a node type as having 1 CPU, 1 GPU, and 5 units of a resource called "custom", set
-        # resources: {"CPU": 1, "GPU": 1, "custom": 5}
-        resources: {}
-        # Provider-specific config for this node type, e.g. instance type. By default
-        # Ray will auto-configure unspecified fields such as SubnetId and KeyName.
-        # For more documentation on available fields, see:
-        # http://boto3.readthedocs.io/en/latest/reference/services/ec2.html#EC2.ServiceResource.create_instances
         node_config:
             InstanceType: g4dn.xlarge
-            # Default AMI for eu-central-1.
-            # Check https://github.com/ray-project/ray/blob/master/python/ray/autoscaler/_private/aws/config.py
-            # for default images for other zones.
             ImageId: ami-0383bd0c1fc4c63ec
-            # Run workers on spot by default. Comment this out to use on-demand.
-            # NOTE: If relying on spot instances, it is best to specify multiple different instance
-            # types to avoid interruption when one instance type is experiencing heightened demand.
-            # Demand information can be found at https://aws.amazon.com/ec2/spot/instance-advisor/
-            # InstanceMarketOptions:
-                # MarketType: spot
-                # Additional options can be found in the boto docs, e.g.
-                #   SpotOptions:
-                #       MaxPrice: MAX_HOURLY_PRICE
-            # Additional options in the boto docs.
+            InstanceMarketOptions:
+                MarketType: spot
+    ray.worker.2xlarge:
+        min_workers: 0
+        max_workers: 1
+        node_config:
+            InstanceType: g4dn.2xlarge
+            ImageId: ami-0383bd0c1fc4c63ec
+            InstanceMarketOptions:
+                MarketType: spot
 
 # Specify the node type of the head node (as configured above).
 head_node_type: ray.head.default
@@ -151,14 +103,6 @@ initialization_commands: []
 
 # List of shell commands to run to set up nodes.
 setup_commands: []
-    # - ray --version
-    # - echo "Head IP is $RAY_HEAD_IP"
-    # Note: if you're developing Ray, you probably want to create a Docker image that
-    # has your Ray repo pre-cloned. Then, you can replace the pip installs
-    # below with a git checkout <your_sha> (and possibly a recompile).
-    # To run the nightly version of ray (as opposed to the latest), either use a rayproject docker image
-    # that has the "nightly" (e.g. "rayproject/ray-ml:nightly-gpu") or uncomment the following line:
-    # - pip install -U "ray[default] @ https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-3.0.0.dev0-cp37-cp37m-manylinux2014_x86_64.whl"
 
 # # Custom commands that will be run on the head node after common setup.
 head_setup_commands: []
