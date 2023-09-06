@@ -54,16 +54,6 @@ available_node_types:
         node_config:
             InstanceType: g4dn.xlarge
             ImageId: ami-0383bd0c1fc4c63ec
-            InstanceMarketOptions:
-                MarketType: spot
-    ray.worker.2xlarge:
-        min_workers: 0
-        max_workers: 1
-        node_config:
-            InstanceType: g4dn.2xlarge
-            ImageId: ami-0383bd0c1fc4c63ec
-            InstanceMarketOptions:
-                MarketType: spot
 
 # Specify the node type of the head node (as configured above).
 head_node_type: ray.head.default
