@@ -1,4 +1,4 @@
-FROM rayproject/ray:2.6.0-gpu
+FROM rayproject/ray:2.6.3-py310-cu118
 
 COPY requirements.txt ./
 
