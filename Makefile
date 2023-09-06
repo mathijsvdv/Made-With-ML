@@ -1,6 +1,8 @@
 # Makefile
 SHELL = /bin/bash
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+CLUSTER_FILE:=cluster.yaml
+JUPYTER_PORT:=6006
 
 # Styling
 .PHONY: style
@@ -21,11 +23,16 @@ clean: style
 
 .PHONY: rsync_up
 rsync_up:
-	ray rsync_up cluster.yaml '$(ROOT_DIR)/' '/home/ray/projects/Made-With-ML'
+	ray rsync_up $(CLUSTER_FILE) '$(ROOT_DIR)/' '/home/ray/projects/Made-With-ML'
 
 .PHONY: rsync_down
 rsync_down:
-	ray rsync_down cluster.yaml '/home/ray/projects/Made-With-ML/' '$(ROOT_DIR)'
+	ray rsync_down $(CLUSTER_FILE) '/home/ray/projects/Made-With-ML/' '$(ROOT_DIR)'
 
+.PHONY: attach
 attach:
-	ray attach cluster.yaml
+	ray attach $(CLUSTER_FILE)
+
+.PHONY: jupyter_lab
+jupyter_lab:
+	ray exec $(CLUSTER_FILE) 'jupyter lab --port $(JUPYTER_PORT)' --port-forward $(JUPYTER_PORT)
