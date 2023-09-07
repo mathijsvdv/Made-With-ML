@@ -3,6 +3,7 @@ SHELL = /bin/bash
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 CLUSTER_FILE:=cluster.yaml
 JUPYTER_PORT:=6006
+MLFLOW_PORT:=8080
 
 # Styling
 .PHONY: style
@@ -36,3 +37,7 @@ attach:
 .PHONY: jupyter_lab
 jupyter_lab:
 	ray exec $(CLUSTER_FILE) 'jupyter lab --port $(JUPYTER_PORT)' --port-forward $(JUPYTER_PORT)
+
+.PHONY: mlflow_server
+mlflow_server:
+	ray exec $(CLUSTER_FILE) 'mlflow server -h 0.0.0.0 -p $(MLFLOW_PORT) --backend-store-uri /tmp/mlflow/' --port-forward $(MLFLOW_PORT)
