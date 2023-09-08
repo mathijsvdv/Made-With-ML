@@ -8,19 +8,23 @@ MLFLOW_PORT:=8080
 # Styling
 .PHONY: style
 style:
-	black .
-	flake8
-	python3 -m isort .
-	pyupgrade
+	pre-commit run black --all-files
+	pre-commit run flake8 --all-files
+	pre-commit run isort --all-files
+	pre-commit run pyupgrade --all-files
 
-# Cleaning
-.PHONY: clean
-clean: style
+# Clear cache and other generated files
+.PHONY: clear_cache
+clear_cache:
 	find . -type f -name "*.DS_Store" -ls -delete
 	find . | grep -E "(__pycache__|\.pyc|\.pyo)" | xargs rm -rf
 	find . | grep -E ".pytest_cache" | xargs rm -rf
 	find . | grep -E ".ipynb_checkpoints" | xargs rm -rf
 	rm -rf .coverage*
+
+# Cleaning
+.PHONY: clean
+clean: style clear_cache
 
 .PHONY: rsync_up
 rsync_up:

@@ -13,11 +13,29 @@ repos:
         exclude: "notebooks"
     -   id: check-yaml
         exclude: "mkdocs.yml"
+-   repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+-   repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+    -   id: flake8
+        additional_dependencies: [Flake8-pyproject]
+-   repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+    -   id: isort
+        args: ['.']
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.2
+    hooks:
+    -   id: pyupgrade
 -   repo: local
     hooks:
-    -   id: clean
-        name: clean
+    -   id: clear_cache
+        name: clear_cache
         entry: make
-        args: ["clean"]
+        args: ["clear_cache"]
         language: system
         pass_filenames: false
