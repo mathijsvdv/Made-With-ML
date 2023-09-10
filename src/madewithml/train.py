@@ -247,10 +247,3 @@ def train_model(
     if results_fp:  # pragma: no cover, saving results
         utils.save_dict(d, results_fp)
     return results
-
-
-if __name__ == "__main__":  # pragma: no cover, application
-    if ray.is_initialized():
-        ray.shutdown()
-    ray.init()
-    app()

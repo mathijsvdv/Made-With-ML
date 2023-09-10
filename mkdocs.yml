@@ -4,14 +4,14 @@ repo_url: https://github.com/mathijsvdv/Made-With-ML/
 nav:
   - Home: index.md
   - madewithml:
-    - data: madewithml/data.md
-    - models: madewithml/models.md
-    - train: madewithml/train.md
-    - tune: madewithml/tune.md
-    - evaluate: madewithml/evaluate.md
-    - predict: madewithml/predict.md
-    - serve: madewithml/serve.md
-    - utils: madewithml/utils.md
+    - data: src/madewithml/data.md
+    - models: src/madewithml/models.md
+    - train: src/madewithml/train.md
+    - tune: src/madewithml/tune.md
+    - evaluate: src/madewithml/evaluate.md
+    - predict: src/madewithml/predict.md
+    - serve: src/madewithml/serve.md
+    - utils: src/madewithml/utils.md
 theme: readthedocs
 plugins:
   - mkdocstrings

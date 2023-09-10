@@ -63,4 +63,4 @@ python_files = "test_*.py"
 
 # Pytest cov
 [tool.coverage.run]
-omit=["madewithml/evaluate.py", "madewithml/serve.py"]
+omit=["src/madewithml/evaluate.py", "src/madewithml/serve.py"]

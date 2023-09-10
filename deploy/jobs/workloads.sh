@@ -19,7 +19,7 @@ export EXPERIMENT_NAME="llm"
 export RESULTS_FILE=results/training_results.json
 export DATASET_LOC="https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/dataset.csv"
 export TRAIN_LOOP_CONFIG='{"dropout_p": 0.5, "lr": 1e-4, "lr_factor": 0.8, "lr_patience": 3}'
-python madewithml/train.py \
+python scripts/train.py \
     --experiment-name "$EXPERIMENT_NAME" \
     --dataset-loc "$DATASET_LOC" \
     --train-loop-config "$TRAIN_LOOP_CONFIG" \
@@ -38,7 +38,7 @@ echo $RUN_ID > $RUN_ID_FILE  # used for serving later
 # Evaluate
 export RESULTS_FILE=results/evaluation_results.json
 export HOLDOUT_LOC="https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/holdout.csv"
-python madewithml/evaluate.py \
+python scripts/evaluate.py \
     --run-id $RUN_ID \
     --dataset-loc $HOLDOUT_LOC \
     --results-fp $RESULTS_FILE

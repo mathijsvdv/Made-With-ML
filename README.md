@@ -170,21 +170,33 @@ Start by exploring the [jupyter notebook](notebooks/madewithml.ipynb) to interac
 </details>
 
 
-## Scripts
+## Modules and scripts
 
-Now we'll execute the same workloads using the clean Python scripts following software engineering best practices (testing, documentation, logging, serving, versioning, etc.) The code we've implemented in our notebook will be refactored into the following scripts:
+Now we'll execute the same workloads using the clean Python scripts following software engineering best practices (testing, documentation, logging, serving, versioning, etc.) The code we've implemented in our notebook will be refactored into the following modules:
 
 ```bash
-madewithml
-├── config.py
-├── data.py
-├── evaluate.py
-├── models.py
-├── predict.py
-├── serve.py
-├── train.py
-├── tune.py
-└── utils.py
+src
+├──madewithml
+   ├── config.py
+   ├── data.py
+   ├── evaluate.py
+   ├── models.py
+   ├── predict.py
+   ├── serve.py
+   ├── train.py
+   ├── tune.py
+   └── utils.py
+```
+
+and then executed in the following scripts:
+
+```bash
+scripts
+├──evaluate.py
+├──predict.py
+├──serve.py
+├──train.py
+├──tune.py
 ```
 
 **Note**: Change the `--num-workers`, `--cpu-per-worker`, and `--gpu-per-worker` input argument values below based on your system's resources. For example, if you're on a local laptop, a reasonable configuration would be `--num-workers 6 --cpu-per-worker 1 --gpu-per-worker 0`.
@@ -194,7 +206,7 @@ madewithml
 export EXPERIMENT_NAME="llm"
 export DATASET_LOC="https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/dataset.csv"
 export TRAIN_LOOP_CONFIG='{"dropout_p": 0.5, "lr": 1e-4, "lr_factor": 0.8, "lr_patience": 3}'
-python madewithml/train.py \
+python scripts/train.py \
     --experiment-name "$EXPERIMENT_NAME" \
     --dataset-loc "$DATASET_LOC" \
     --train-loop-config "$TRAIN_LOOP_CONFIG" \
@@ -212,7 +224,7 @@ export EXPERIMENT_NAME="llm"
 export DATASET_LOC="https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/dataset.csv"
 export TRAIN_LOOP_CONFIG='{"dropout_p": 0.5, "lr": 1e-4, "lr_factor": 0.8, "lr_patience": 3}'
 export INITIAL_PARAMS="[{\"train_loop_config\": $TRAIN_LOOP_CONFIG}]"
-python madewithml/tune.py \
+python scripts/tune.py \
     --experiment-name "$EXPERIMENT_NAME" \
     --dataset-loc "$DATASET_LOC" \
     --initial-params "$INITIAL_PARAMS" \
@@ -256,9 +268,9 @@ mlflow server -h 0.0.0.0 -p 8080 --backend-store-uri $MODEL_REGISTRY
 ### Evaluation
 ```bash
 export EXPERIMENT_NAME="llm"
-export RUN_ID=$(python madewithml/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
+export RUN_ID=$(python scripts/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
 export HOLDOUT_LOC="https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/holdout.csv"
-python madewithml/evaluate.py \
+python scripts/evaluate.py \
     --run-id $RUN_ID \
     --dataset-loc $HOLDOUT_LOC \
     --results-fp results/evaluation_results.json
@@ -280,8 +292,8 @@ python madewithml/evaluate.py \
 ```bash
 # Get run ID
 export EXPERIMENT_NAME="llm"
-export RUN_ID=$(python madewithml/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
-python madewithml/predict.py predict \
+export RUN_ID=$(python scripts/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
+python scripts/predict.py predict \
     --run-id $RUN_ID \
     --title "Transfer learning with transformers" \
     --description "Using transformers for transfer learning on text classification tasks."
@@ -313,8 +325,8 @@ python madewithml/predict.py predict \
   ```bash
   # Set up
   export EXPERIMENT_NAME="llm"
-  export RUN_ID=$(python madewithml/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
-  python madewithml/serve.py --run_id $RUN_ID
+  export RUN_ID=$(python scripts/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
+  python scripts/serve.py --run_id $RUN_ID
   ```
 
   While the application is running, we can use it via cURL, Python, etc.:
@@ -358,8 +370,8 @@ curl -X POST -H "Content-Type: application/json" -d '{
   ```bash
   # Set up
   export EXPERIMENT_NAME="llm"
-  export RUN_ID=$(python madewithml/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
-  python madewithml/serve.py --run_id $RUN_ID
+  export RUN_ID=$(python scripts/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
+  python scripts/serve.py --run_id $RUN_ID
   ```
 
   While the application is running, we can use it via cURL, Python, etc.:
@@ -395,7 +407,7 @@ pytest --dataset-loc=$DATASET_LOC tests/data --verbose --disable-warnings
 
 # Model
 export EXPERIMENT_NAME="llm"
-export RUN_ID=$(python madewithml/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
+export RUN_ID=$(python scripts/predict.py get-best-run-id --experiment-name $EXPERIMENT_NAME --metric val_loss --mode ASC)
 pytest --run-id=$RUN_ID tests/model --verbose --disable-warnings
 
 # Coverage

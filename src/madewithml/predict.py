@@ -131,7 +131,3 @@ def predict(
     results = predict_with_proba(df=sample_df, predictor=predictor)
     logger.info(json.dumps(results, cls=NumpyEncoder, indent=2))
     return results
-
-
-if __name__ == "__main__":  # pragma: no cover, application
-    app()

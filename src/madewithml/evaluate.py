@@ -148,7 +148,3 @@ def evaluate(
     if results_fp:  # pragma: no cover, saving results
         utils.save_dict(d=metrics, path=results_fp)
     return metrics
-
-
-if __name__ == "__main__":  # pragma: no cover, checked during evaluation workload
-    app()
