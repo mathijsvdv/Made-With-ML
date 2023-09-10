@@ -45,3 +45,7 @@ jupyter_lab:
 .PHONY: mlflow_server
 mlflow_server:
 	ray exec $(CLUSTER_FILE) 'mlflow server -h 0.0.0.0 -p $(MLFLOW_PORT) --backend-store-uri /tmp/mlflow/' --port-forward $(MLFLOW_PORT)
+
+.PHONY: dashboard
+dashboard:
+	ray dashboard $(CLUSTER_FILE)
