@@ -1,6 +1,6 @@
 ## Documentation
 
-- [madewithml](madewithml/data.md): documentation.
+- [madewithml](madewithml/data.md): documentation for functions and classes in the Made-With-ML course.
 
 ## Lessons
 
