@@ -20,6 +20,7 @@ from ray.air.integrations.mlflow import MLflowLoggerCallback
 from ray.data import Dataset
 from ray.train.torch import TorchCheckpoint, TorchTrainer
 from transformers import BertModel
+from typer_config import use_yaml_config
 from typing_extensions import Annotated
 
 from madewithml import data, models, utils
@@ -139,6 +140,7 @@ def train_loop_per_worker(config: dict) -> None:  # pragma: no cover, tested via
 
 
 @app.command()
+@use_yaml_config(default_value="config/train.yml")
 def train_model(
     experiment_name: Annotated[str, typer.Option(help="name of the experiment for this training workload.")] = None,
     dataset_loc: Annotated[str, typer.Option(help="location of the dataset.")] = None,
