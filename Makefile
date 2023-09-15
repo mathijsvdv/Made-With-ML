@@ -2,8 +2,10 @@
 SHELL = /bin/bash
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 CLUSTER_FILE:=cluster.yaml
+RUNTIME_ENV_FILE:=runtime_env.yaml
 JUPYTER_PORT:=6006
 MLFLOW_PORT:=8080
+RAY_ADDRESS:="http://127.0.0.1:8265/"
 
 # Styling
 .PHONY: style
@@ -49,3 +51,7 @@ mlflow_server:
 .PHONY: dashboard
 dashboard:
 	ray dashboard $(CLUSTER_FILE)
+
+.PHONY: train
+train:
+	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/train.py --config config/train.yml
