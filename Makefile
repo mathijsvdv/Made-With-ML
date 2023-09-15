@@ -54,4 +54,4 @@ dashboard:
 
 .PHONY: train
 train:
-	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/train.py --config config/train.yml
+	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/train.py

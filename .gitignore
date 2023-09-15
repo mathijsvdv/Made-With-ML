@@ -114,3 +114,7 @@ src/**/_version.py
 
 # Runtime env file
 runtime_env.yaml
+
+# Hydra-generated files
+outputs/**/main.log
+outputs/**/.hydra
