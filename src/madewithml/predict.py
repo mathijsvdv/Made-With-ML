@@ -6,17 +6,12 @@ import numpy as np
 import pandas as pd
 import ray
 import torch
-import typer
 from numpyencoder import NumpyEncoder
 from ray.air import Result
 from ray.train.torch import TorchPredictor
 from ray.train.torch.torch_checkpoint import TorchCheckpoint
-from typing_extensions import Annotated
 
 from madewithml.config import logger, mlflow
-
-# Initialize Typer CLI app
-app = typer.Typer()
 
 
 def decode(indices: Iterable[Any], index_to_class: Dict) -> List:
@@ -71,27 +66,6 @@ def predict_with_proba(
     return results
 
 
-@app.command()
-def get_best_run_id(experiment_name: str = "", metric: str = "", mode: str = "") -> str:  # pragma: no cover, mlflow logic
-    """Get the best run_id from an MLflow experiment.
-
-    Args:
-        experiment_name (str): name of the experiment.
-        metric (str): metric to filter by.
-        mode (str): direction of metric (ASC/DESC).
-
-    Returns:
-        str: best run id from experiment.
-    """
-    sorted_runs = mlflow.search_runs(
-        experiment_names=[experiment_name],
-        order_by=[f"metrics.{metric} {mode}"],
-    )
-    run_id = sorted_runs.iloc[0].run_id
-    print(run_id)
-    return run_id
-
-
 def get_best_checkpoint(run_id: str) -> TorchCheckpoint:  # pragma: no cover, mlflow logic
     """Get the best checkpoint from a specific run.
 
@@ -106,11 +80,10 @@ def get_best_checkpoint(run_id: str) -> TorchCheckpoint:  # pragma: no cover, ml
     return results.best_checkpoints[0][0]
 
 
-@app.command()
 def predict(
-    run_id: Annotated[str, typer.Option(help="id of the specific run to load from")] = None,
-    title: Annotated[str, typer.Option(help="project title")] = None,
-    description: Annotated[str, typer.Option(help="project description")] = None,
+    run_id: str = None,
+    title: str = None,
+    description: str = None,
 ) -> Dict:  # pragma: no cover, tested with inference workload
     """Predict the tag for a project given it's title and description.
 

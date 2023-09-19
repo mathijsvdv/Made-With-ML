@@ -1,0 +1,11 @@
+experiment_name: llm
+dataset_loc: https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/dataset.csv
+initial_params: '[{"train_loop_config": {"dropout_p": 0.5, "lr": 1e-4, "lr_factor": 0.8, "lr_patience": 3}}]'
+num_workers: 1
+cpu_per_worker: 3
+gpu_per_worker: 1
+num_runs: 2
+num_samples: null
+num_epochs: 10
+batch_size: 256
+results_fp: results/tuning_results.json
