@@ -1,0 +1,3 @@
+run_id: null  # Fill with actual run_id
+dataset_loc: "https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/holdout.csv"
+results_fp: results/evaluation_results.json

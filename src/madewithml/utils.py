@@ -106,6 +106,26 @@ def get_run_id(experiment_name: str, trial_id: str) -> str:  # pragma: no cover,
     return run.run_id
 
 
+def get_best_run_id(experiment_name: str = "", metric: str = "", mode: str = "") -> str:  # pragma: no cover, mlflow logic
+    """Get the best run_id from an MLflow experiment.
+
+    Args:
+        experiment_name (str): name of the experiment.
+        metric (str): metric to filter by.
+        mode (str): direction of metric (ASC/DESC).
+
+    Returns:
+        str: best run id from experiment.
+    """
+    sorted_runs = mlflow.search_runs(
+        experiment_names=[experiment_name],
+        order_by=[f"metrics.{metric} {mode}"],
+    )
+    run_id = sorted_runs.iloc[0].run_id
+    print(run_id)
+    return run_id
+
+
 def dict_to_list(data: Dict, keys: List[str]) -> List[Dict[str, Any]]:
     """Convert a dictionary to a list of dictionaries.
 

@@ -5,19 +5,13 @@ from typing import Dict
 
 import numpy as np
 import ray
-import ray.train.torch  # NOQA: F401 (imported but unused)
-import typer
 from ray.data import Dataset
 from ray.train.torch.torch_predictor import TorchPredictor
 from sklearn.metrics import precision_recall_fscore_support
 from snorkel.slicing import PandasSFApplier, slicing_function
-from typing_extensions import Annotated
 
 from madewithml import predict, utils
 from madewithml.config import logger
-
-# Initialize Typer CLI app
-app = typer.Typer()
 
 
 def get_overall_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> Dict:  # pragma: no cover, eval workload
@@ -105,11 +99,10 @@ def get_slice_metrics(y_true: np.ndarray, y_pred: np.ndarray, ds: Dataset) -> Di
     return slice_metrics
 
 
-@app.command()
 def evaluate(
-    run_id: Annotated[str, typer.Option(help="id of the specific run to load from")] = None,
-    dataset_loc: Annotated[str, typer.Option(help="dataset (with labels) to evaluate on")] = None,
-    results_fp: Annotated[str, typer.Option(help="location to save evaluation results to")] = None,
+    run_id: str = None,
+    dataset_loc: str = None,
+    results_fp: str = None,
 ) -> Dict:  # pragma: no cover, eval workload
     """Evaluate on the holdout dataset.
 

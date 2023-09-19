@@ -36,6 +36,21 @@ clear_cache:
 .PHONY: clean
 clean: style clear_cache
 
+.PHONY: dashboard
+dashboard:
+	ray dashboard $(CLUSTER_FILE)
+
+.PHONY: _up
+_up:
+	ray up $(CLUSTER_FILE)
+
+.PHONY: up
+up: _up dashboard
+
+.PHONY: down
+down:
+	ray down $(CLUSTER_FILE)
+
 .PHONY: rsync_up
 rsync_up:
 	ray rsync_up $(CLUSTER_FILE) '$(ROOT_DIR)/' '/home/ray/projects/Made-With-ML'
@@ -56,10 +71,22 @@ jupyter_lab:
 mlflow_server:
 	ray exec $(CLUSTER_FILE) 'mlflow server -h 0.0.0.0 -p $(MLFLOW_PORT) --backend-store-uri /tmp/mlflow/' --port-forward $(MLFLOW_PORT)
 
-.PHONY: dashboard
-dashboard:
-	ray dashboard $(CLUSTER_FILE)
-
 .PHONY: train
 train:
 	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/train.py
+
+.PHONY: tune
+tune:
+	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/tune.py
+
+.PHONY: evaluate
+evaluate:
+	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/evaluate.py
+
+.PHONY: get_best_run_id
+get_best_run_id:
+	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/get_best_run_id.py
+
+.PHONY: predict
+predict:
+	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/predict.py
