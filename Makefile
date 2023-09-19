@@ -10,6 +10,7 @@ RAY_ADDRESS:="http://127.0.0.1:8265/"
 
 .PHONY: docker
 docker:
+	docker login
 	docker build -t $(DOCKER_IMAGE) .
 	docker push $(DOCKER_IMAGE)
 	docker rmi $(DOCKER_IMAGE)
