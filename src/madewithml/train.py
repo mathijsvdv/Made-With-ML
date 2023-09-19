@@ -9,7 +9,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import typer
-from omegaconf import DictConfig
 from ray.air import session
 from ray.air.config import (
     CheckpointConfig,
@@ -138,7 +137,18 @@ def train_loop_per_worker(config: dict) -> None:  # pragma: no cover, tested via
         session.report(metrics, checkpoint=checkpoint)
 
 
-def train_model(cfg: DictConfig) -> ray.air.result.Result:
+def train_model(
+    experiment_name: str = None,
+    dataset_loc: str = None,
+    train_loop_config: str = None,
+    num_workers: int = 1,
+    cpu_per_worker: int = 1,
+    gpu_per_worker: int = 0,
+    num_samples: int = None,
+    num_epochs: int = 1,
+    batch_size: int = 256,
+    results_fp: str = None,
+) -> ray.air.result.Result:
     """Main train function to train our model as a distributed workload.
 
     Args:
@@ -159,16 +169,6 @@ def train_model(cfg: DictConfig) -> ray.air.result.Result:
     Returns:
         ray.air.result.Result: training results.
     """
-    experiment_name = cfg.experiment_name
-    dataset_loc = cfg.dataset_loc
-    train_loop_config = cfg.train_loop_config
-    num_workers = cfg.num_workers
-    cpu_per_worker = cfg.cpu_per_worker
-    gpu_per_worker = cfg.gpu_per_worker
-    num_samples = cfg.num_samples
-    num_epochs = cfg.num_epochs
-    batch_size = cfg.batch_size
-    results_fp = cfg.results_fp
 
     # Set up
     train_loop_config = json.loads(train_loop_config)
