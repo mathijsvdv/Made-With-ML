@@ -1,11 +1,18 @@
 # Makefile
 SHELL = /bin/bash
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+DOCKER_IMAGE:=mathijsvdv/made-with-ml
 CLUSTER_FILE:=cluster.yaml
 RUNTIME_ENV_FILE:=runtime_env.yaml
 JUPYTER_PORT:=6006
 MLFLOW_PORT:=8080
 RAY_ADDRESS:="http://127.0.0.1:8265/"
+
+.PHONY: docker
+docker:
+	docker build -t $(DOCKER_IMAGE) .
+	docker push $(DOCKER_IMAGE)
+	docker rmi $(DOCKER_IMAGE)
 
 # Styling
 .PHONY: style
