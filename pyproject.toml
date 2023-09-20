@@ -60,6 +60,9 @@ py39plus = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
+markers = [
+  "training: marks tests as involving model training",
+]
 
 # Pytest cov
 [tool.coverage.run]
