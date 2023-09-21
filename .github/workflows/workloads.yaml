@@ -32,7 +32,7 @@ jobs:
       - name: Set up Ray cluster
         run: |
           ray up cluster.yaml -y --no-restart
-          ray dashboard cluster.yaml
+          ray dashboard cluster.yaml &
 
       # Run workloads
       - name: Workloads
