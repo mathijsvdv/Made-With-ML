@@ -62,6 +62,7 @@ head_node_type: ray.head.default
 # dictionary from REMOTE_PATH: LOCAL_PATH, e.g.
 file_mounts: {
     "/home/ray/projects/Made-With-ML": ".",
+    "/home/ray/.aws/credentials": "~/.aws/credentials"
 }
 
 # Files or directories to copy from the head node to the worker nodes. The format is a

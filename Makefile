@@ -90,3 +90,7 @@ get_best_run_id:
 .PHONY: predict
 predict:
 	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/predict.py
+
+.PHONY: workloads
+workloads:
+	ray job submit --address $(RAY_ADDRESS) --runtime-env deploy/jobs/runtime_env.yaml -- sh deploy/jobs/workloads.sh
