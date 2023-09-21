@@ -27,10 +27,21 @@ jobs:
           cache: 'pip'
       - run: python3 -m pip install ray[default,air]==2.6.3 hydra-core==1.3.2
 
+      # Set up Ray cluster
+      - name: Set up Ray cluster
+        run: |
+          ray up cluster.yaml -y --no-restart
+          ray dashboard cluster.yaml
+
       # Run workloads
       - name: Workloads
         run: |
           make workloads
+
+      # Tear down Ray cluster
+      - name: Tear down Ray cluster
+        if: always()
+        run: ray down cluster.yaml -y
 
       # Read results from S3
       - name: Read results from S3
