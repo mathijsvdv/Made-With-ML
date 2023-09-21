@@ -16,7 +16,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::990473716965:role/github-actions-madewithml
-          role-session-name: s3access
+          role-session-name: ec2&s3access
           aws-region: eu-central-1
 
       # Set up dependencies
