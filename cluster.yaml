@@ -48,16 +48,12 @@ available_node_types:
                   Ebs:
                       VolumeSize: 500
                       DeleteOnTermination: true
-            IamInstanceProfile:
-                Arn: arn:aws:iam::990473716965:role/github-actions-madewithml
     ray.worker.default:
         min_workers: 0
         max_workers: 1
         node_config:
             InstanceType: g4dn.xlarge
             ImageId: ami-0383bd0c1fc4c63ec
-            IamInstanceProfile:
-                Arn: arn:aws:iam::990473716965:role/github-actions-madewithml
 
 # Specify the node type of the head node (as configured above).
 head_node_type: ray.head.default
