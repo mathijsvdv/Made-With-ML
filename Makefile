@@ -90,3 +90,7 @@ get_best_run_id:
 .PHONY: predict
 predict:
 	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/predict.py
+
+.PHONY: serve
+serve:
+	ray job submit --address $(RAY_ADDRESS) --runtime-env $(RUNTIME_ENV_FILE) -- python scripts/serve.py --run_id $(RUN_ID)
